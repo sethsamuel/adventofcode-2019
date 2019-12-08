@@ -19,6 +19,8 @@ function animate() {
 
 requestAnimationFrame(animate);
 
+const days = [1, 2, 3];
+
 const App = (
   <Block padding="4rem">
     <Block
@@ -34,9 +36,18 @@ const App = (
     <Block textAlign="center" marginTop="2rem">
       Let's build some weird shit.
     </Block>
-    <Grid gridTemplateColumns="repeat(4,1fr)">
-      <Day day="1" />
-      <Day day="2" />
+    <Grid
+      mediaQueries={{
+        sm: "screen and (max-width: 780px)",
+        lg: "screen and (min-width: 1280px)"
+      }}
+      gridTemplateColumns="repeat(3,1fr)"
+      smGridTemplateColumns="repeat(1,1fr)"
+      lgGridTemplateColumns="repeat(4,1fr)"
+    >
+      {days.map(d => (
+        <Day day={d} />
+      ))}
     </Grid>
   </Block>
 );

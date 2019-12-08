@@ -7,7 +7,8 @@
     "jsxstyle": "2.2.0",
     "parcel-bundler": "1.12.4",
     "parcel-plugin-text": "0.9.5",
-    "preact": "10.0.5"
+    "preact": "10.0.5",
+    "stats.js": "0.17.0"
   },
   "devDependencies": {},
   "browserslist": [

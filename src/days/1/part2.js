@@ -9,7 +9,12 @@ self.onmessage = async e => {
       //   for (let i = 0; i <= 100000000; i++) {
       //     3 + 5;
       //   }
-      return Math.floor(mass / 3) - 2;
+      const fuel = Math.max(0, Math.floor(mass / 3) - 2);
+      if (fuel > 0) {
+        return fuel + fuelRequired(fuel);
+      } else {
+        return fuel;
+      }
     };
 
     let complete = 0;

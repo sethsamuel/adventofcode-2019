@@ -4,13 +4,17 @@ import { Block, InlineBlock, Col, Row } from "jsxstyle/preact";
 
 const inputs = {
   1: import("../days/1/input.txt"),
-  2: import("../days/2/input.txt")
+  2: import("../days/2/input.txt"),
+  3: import("../days/3/input.txt")
 };
+
 const workers = {
   "1.1": new Worker("../days/1/part1.js"),
   "1.2": new Worker("../days/1/part2.js"),
-  "2.1": new Worker("../days/2/part1.js")
-  //   "2.2": new Worker("../days/2/part2.js")
+  "2.1": new Worker("../days/2/part1.js"),
+  "2.2": new Worker("../days/2/part2.js"),
+  "3.1": new Worker("../days/3/part1.js"),
+  "3.2": new Worker("../days/3/part2.js")
 };
 
 const Day = ({ day }) => {
@@ -19,6 +23,9 @@ const Day = ({ day }) => {
   const [isRunning, setIsRunning] = useState(false);
 
   const start = async part => {
+    if (isRunning) {
+      return;
+    }
     console.log("Starting");
     setIsRunning(true);
     const worker = workers[`${day}.${part}`];
@@ -52,7 +59,7 @@ const Day = ({ day }) => {
       <Block fontWeight="500" fontSize="2rem" marginBottom="1rem">
         Day {day}
       </Block>
-      {result ? (
+      {result !== null ? (
         result
       ) : isRunning ? (
         <InlineBlock

@@ -19,7 +19,7 @@ function animate() {
 
 requestAnimationFrame(animate);
 
-const days = [1, 2, 3];
+const days = [1, 2, 3, 4];
 
 const App = (
   <Block padding="4rem">
@@ -42,12 +42,14 @@ const App = (
         lg: "screen and (min-width: 850px)"
       }}
       gridTemplateColumns="repeat(2,1fr)"
+      gridRowGap="1rem"
+      gridColumnGap="1rem"
       smGridTemplateColumns="repeat(1,1fr)"
       lgGridTemplateColumns="repeat(3,1fr)"
       maxWidth="1080px"
       margin="0 auto"
     >
-      {days.map(d => (
+      {days.reverse().map(d => (
         <Day day={d} />
       ))}
     </Grid>

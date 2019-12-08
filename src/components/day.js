@@ -2,7 +2,6 @@ import { h } from "preact";
 import { useState } from "preact/hooks";
 import { Block, InlineBlock, Col, Row } from "jsxstyle/preact";
 
-// import inputs from "../days/*/input.txt";
 const inputs = {
   1: import("../days/1/input.txt"),
   2: import("../days/2/input.txt")
@@ -15,13 +14,20 @@ const workers = {
 };
 
 const Day = ({ day }) => {
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState();
   const [result, setResult] = useState();
+  const [isRunning, setIsRunning] = useState(false);
 
   const start = async part => {
     console.log("Starting");
+    setIsRunning(true);
     const worker = workers[`${day}.${part}`];
     // const worker = new Worker(`../days/${day}/part${part}.js`);
+    // const worker = (() => {
+    //   if (day === "1" && part === "1") {
+    //     return new Worker("../days/1/part1.js");
+    //   }
+    // })();
     worker.onmessage = e => {
       console.log("Messag from worker", e);
       const { command } = e.data;
@@ -29,19 +35,13 @@ const Day = ({ day }) => {
         console.log("Result", e.data.result);
         setResult(e.data.result);
         setProgress(1);
+        setIsRunning(false);
       } else if (command === "PROGRESS") {
         const { complete, total } = e.data;
         console.log("Progress", complete / total);
         setProgress(complete / total);
       }
     };
-    // const input = await (async () => {
-    //   if (day === "1") {
-    //     return await import("../days/1/input.txt");
-    //   } else {
-    //     return "";
-    //   }
-    // });
 
     const input = await inputs[day];
     worker.postMessage({ command: "START", input });
@@ -49,31 +49,35 @@ const Day = ({ day }) => {
 
   return (
     <Col border="1px solid black" padding="2rem" alignItems="center">
-      <Block fontWeight="500" fontSize="2rem">
+      <Block fontWeight="500" fontSize="2rem" marginBottom="1rem">
         Day {day}
       </Block>
-      {progress < 1 ? (
+      {result ? (
+        result
+      ) : isRunning ? (
         <InlineBlock
           component="progress"
           width="100%"
-          props={{ max: 1, value: progress.toString() }}
+          margin="2px 0"
+          props={{
+            max: 1,
+            value: progress ? progress.toString() : undefined
+          }}
         />
-      ) : (
-        result
-      )}
-      <Row>
+      ) : null}
+      <Row marginTop="1rem">
         <InlineBlock
           component="button"
           margin="0 auto"
           marginRight="0.5rem"
-          props={{ onClick: () => start(1) }}
+          props={{ onClick: () => start("1") }}
         >
           Part 1
         </InlineBlock>
         <InlineBlock
           component="button"
           margin="0 auto"
-          props={{ onClick: () => start(2) }}
+          props={{ onClick: () => start("2") }}
         >
           Part 2
         </InlineBlock>

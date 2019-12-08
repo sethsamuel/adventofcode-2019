@@ -38,12 +38,14 @@ const App = (
     </Block>
     <Grid
       mediaQueries={{
-        sm: "screen and (max-width: 780px)",
-        lg: "screen and (min-width: 1280px)"
+        sm: "screen and (max-width: 640px)",
+        lg: "screen and (min-width: 850px)"
       }}
-      gridTemplateColumns="repeat(3,1fr)"
+      gridTemplateColumns="repeat(2,1fr)"
       smGridTemplateColumns="repeat(1,1fr)"
-      lgGridTemplateColumns="repeat(4,1fr)"
+      lgGridTemplateColumns="repeat(3,1fr)"
+      maxWidth="1080px"
+      margin="0 auto"
     >
       {days.map(d => (
         <Day day={d} />

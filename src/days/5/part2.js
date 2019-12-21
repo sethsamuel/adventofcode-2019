@@ -5,48 +5,91 @@ self.onmessage = async e => {
     const codes = input.split(",").map(l => parseInt(l));
     console.log(`${codes.length} pieces of input`);
 
-    const getOutput = ({ noun, verb }) => {
+    const getOutput = ({ input }) => {
       const memory = [].concat(codes);
-      memory[1] = noun;
-      memory[2] = verb;
-      // console.log(memory.slice(0, 4));
+
       let head = 0;
+      let output;
+      let lastHead;
       while (memory[head] !== 99) {
-        if (memory[head] === 1) {
-          memory[memory[head + 3]] =
-            memory[memory[head + 1]] + memory[memory[head + 2]];
-        } else if (memory[head] === 2) {
-          memory[memory[head + 3]] =
-            memory[memory[head + 1]] * memory[memory[head + 2]];
-        } else {
+        if (lastHead === head) {
+          console.error("Loop");
           return;
         }
-        head += 4;
+        lastHead = head;
+        const instruction = memory[head].toString().padStart(5, "0");
+        console.log(instruction);
+        const op = parseInt(instruction.slice(3, 5));
+        const modes = instruction
+          .slice(0, 3)
+          .split("")
+          .map(i => parseInt(i));
+
+        console.log(`Op: ${op} Modes: ${modes}`);
+
+        let step = 0;
+        if (op === 1 || op === 2) {
+          const arg1 =
+            modes[2] === 0 ? memory[memory[head + 1]] : memory[head + 1];
+          const arg2 =
+            modes[1] === 0 ? memory[memory[head + 2]] : memory[head + 2];
+          if (modes[0] === 0) {
+            console.log(
+              `Updating ${memory[memory[head + 3]]} with params ${arg1} ${arg2}`
+            );
+            memory[memory[head + 3]] = op === 1 ? arg1 + arg2 : arg1 * arg2;
+          } else {
+            console.error("Write in immediate mode");
+            return;
+            memory[head + 3] = op === 1 ? arg1 + arg2 : arg1 * arg2;
+          }
+          step = 4;
+        } else if (op === 3) {
+          console.log("Placing input in ", memory[head + 1]);
+          memory[memory[head + 1]] = input;
+          step = 2;
+        } else if (op === 4) {
+          console.log("Output in address");
+          output = modes[2] === 0 ? memory[memory[head + 1]] : memory[head + 1];
+          if (output !== 0) {
+            console.log("Error", memory[head + 1], memory[memory[head + 1]]);
+            // return null;
+          }
+          step = 2;
+        } else if (op === 5 || op === 6) {
+          const test =
+            modes[2] === 0 ? memory[memory[head + 1]] : memory[head + 1];
+          const pointer =
+            modes[1] === 0 ? memory[memory[head + 2]] : memory[head + 2];
+          if ((op === 5 && test !== 0) || (op === 6 && test === 0)) {
+            head = pointer;
+            step = 0;
+          } else {
+            step = 3;
+          }
+        } else if (op === 7 || op === 8) {
+          const arg1 =
+            modes[2] === 0 ? memory[memory[head + 1]] : memory[head + 1];
+          const arg2 =
+            modes[1] === 0 ? memory[memory[head + 2]] : memory[head + 2];
+          if ((op === 7 && arg1 < arg2) || (op === 8 && arg1 === arg2)) {
+            memory[memory[head + 3]] = 1;
+          } else {
+            memory[memory[head + 3]] = 0;
+          }
+          step = 4;
+        } else {
+          console.error("Unknown op");
+          return;
+        }
+        head += step;
       }
-      return memory[0];
+      return output;
     };
 
-    let complete = 0;
-    let lastProgress = new Date().getTime();
-    for (let noun = 0; noun < 100; noun++) {
-      for (let verb = 0; verb < 100; verb++) {
-        const output = getOutput({ noun, verb });
-        if (output === 19690720) {
-          postMessage({ command: "RESULT", result: noun * 100 + verb });
-          return;
-        }
-        if (new Date().getTime() - lastProgress > 1 / 30) {
-          lastProgress = new Date().getTime();
-
-          postMessage({
-            command: "PROGRESS",
-            complete: noun * 100 + verb,
-            total: 100 * 100
-          });
-        }
-      }
-    }
-    postMessage({ command: "RESULT", result: "NOTFOUND" });
+    const output = getOutput({ input: 5 });
+    postMessage({ command: "RESULT", result: output });
+    return;
   }
 };
 

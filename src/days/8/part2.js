@@ -3,65 +3,42 @@ self.onmessage = async e => {
   console.log("Message received", e);
   const { command, input } = e.data;
   if (command === "START") {
-    const test = `COM)B
-    B)C
-    C)D
-    D)E
-    E)F
-    B)G
-    G)H
-    D)I
-    E)J
-    J)K
-    K)L
-    K)YOU
-    I)SAN`;
-    // const lines = test.split("\n").map(l => l.trim());
-    const lines = input.split("\n");
+    const pixels = input.split("").map(i => parseInt(i));
+    // const pixels = "0222112222120000".split("").map(i => parseInt(i));
 
-    console.log(lines.sort());
-    const orbits = {};
-    for (let line of lines) {
-      const objects = line.split(")");
-      orbits[objects[0]] = orbits[objects[0]] || {
-        children: [],
-        ancestors: []
-      };
-      orbits[objects[1]] = orbits[objects[1]] || {
-        children: [],
-        ancestors: []
-      };
-      orbits[objects[0]].children = [
-        ...orbits[objects[0]].children,
-        objects[1]
-      ];
-      orbits[objects[1]].parent = objects[0];
-    }
-    console.log(orbits);
-    let center = _.find(orbits, o => !o.parent);
-    console.log(center);
+    const width = 25;
+    const height = 6;
 
-    const buildAncestors = key => {
-      let parent = orbits[key].parent;
-      while (parent) {
-        orbits[key].ancestors.push(parent);
-        parent = orbits[parent].parent;
+    // const width = 2;
+    // const height = 2;
+    const image = Array(height)
+      .fill(0)
+      .map(i => Array(width).fill(2));
+    console.log("Initial", [...image]);
+    for (
+      let layer = pixels.length / (width * height) - 1;
+      layer >= 0;
+      layer--
+    ) {
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          let pixel = pixels[layer * width * height + y * width + x];
+          if (isNaN(pixel)) {
+            debugger;
+          }
+          if (pixel !== 2) {
+            image[y][x] = pixel;
+          }
+        }
       }
-    };
-    buildAncestors("YOU");
-    buildAncestors("SAN");
-    console.log(orbits["YOU"]);
-    console.log(orbits["SAN"]);
-    const fca = orbits["YOU"].ancestors.find(n =>
-      orbits["SAN"].ancestors.includes(n)
-    );
-    console.log("FCA", fca);
+    }
+    console.log(image);
+    const result = image
+      .map(row => row.map(i => (i === 0 ? " " : "O")).join(""))
+      .join("\n");
+    console.log(result);
 
-    let distance =
-      orbits["YOU"].ancestors.indexOf(fca) +
-      orbits["SAN"].ancestors.indexOf(fca);
-
-    postMessage({ command: "RESULT", result: distance });
+    postMessage({ command: "RESULT", result });
   }
 };
 

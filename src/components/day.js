@@ -76,7 +76,7 @@ const Day = ({ day }) => {
         Day {day}
       </Block>
       {result !== null ? (
-        result
+        <pre>{result}</pre>
       ) : isRunning ? (
         <InlineBlock
           component="progress"

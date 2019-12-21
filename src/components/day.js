@@ -7,7 +7,8 @@ const inputs = {
   2: import("../days/2/input.txt"),
   3: import("../days/3/input.txt"),
   4: import("../days/4/input.txt"),
-  5: import("../days/5/input.txt")
+  5: import("../days/5/input.txt"),
+  6: import("../days/6/input.txt")
 };
 
 const workers = {
@@ -20,7 +21,9 @@ const workers = {
   "4.1": new Worker("../days/4/part1.js"),
   "4.2": new Worker("../days/4/part2.js"),
   "5.1": new Worker("../days/5/part1.js"),
-  "5.2": new Worker("../days/5/part2.js")
+  "5.2": new Worker("../days/5/part2.js"),
+  "6.1": new Worker("../days/6/part1.js"),
+  "6.2": new Worker("../days/6/part2.js")
 };
 
 const Day = ({ day }) => {

@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "jsxstyle": "2.2.0",
+    "lodash": "4.17.15",
     "parcel-bundler": "1.12.4",
     "parcel-plugin-text": "0.9.5",
     "preact": "10.0.5",

@@ -6,7 +6,8 @@ const inputs = {
   1: import("../days/1/input.txt"),
   2: import("../days/2/input.txt"),
   3: import("../days/3/input.txt"),
-  4: import("../days/4/input.txt")
+  4: import("../days/4/input.txt"),
+  5: import("../days/5/input.txt")
 };
 
 const workers = {
@@ -17,7 +18,9 @@ const workers = {
   "3.1": new Worker("../days/3/part1.js"),
   "3.2": new Worker("../days/3/part2.js"),
   "4.1": new Worker("../days/4/part1.js"),
-  "4.2": new Worker("../days/4/part2.js")
+  "4.2": new Worker("../days/4/part2.js"),
+  "5.1": new Worker("../days/5/part1.js"),
+  "5.2": new Worker("../days/5/part2.js")
 };
 
 const Day = ({ day }) => {
@@ -31,6 +34,7 @@ const Day = ({ day }) => {
     }
     console.log("Starting");
     setIsRunning(true);
+    setResult(null);
     const worker = workers[`${day}.${part}`];
     // const worker = new Worker(`../days/${day}/part${part}.js`);
     // const worker = (() => {

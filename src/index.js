@@ -19,7 +19,7 @@ function animate() {
 
 requestAnimationFrame(animate);
 
-const days = [1, 2, 3, 4];
+const days = [1, 2, 3, 4, 5];
 
 const App = (
   <Block padding="4rem">

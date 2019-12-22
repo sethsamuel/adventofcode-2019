@@ -19,9 +19,9 @@ function animate() {
 
 requestAnimationFrame(animate);
 
-const days = Array(9)
+const days = Array(10)
   .fill(0)
-  .map((v, i) => i + 1);
+  .map((_v, i) => i + 1);
 
 const App = (
   <Block padding="4rem">

@@ -10,7 +10,8 @@ const inputs = {
   5: import("../days/5/input.txt"),
   6: import("../days/6/input.txt"),
   7: import("../days/7/input.txt"),
-  8: import("../days/8/input.txt")
+  8: import("../days/8/input.txt"),
+  9: import("../days/9/input.txt")
 };
 
 const workers = {
@@ -29,7 +30,9 @@ const workers = {
   "7.1": new Worker("../days/7/part1.js"),
   "7.2": new Worker("../days/7/part2.js"),
   "8.1": new Worker("../days/8/part1.js"),
-  "8.2": new Worker("../days/8/part2.js")
+  "8.2": new Worker("../days/8/part2.js"),
+  "9.1": new Worker("../days/9/part1.js"),
+  "9.2": new Worker("../days/9/part2.js")
 };
 
 const Day = ({ day }) => {
